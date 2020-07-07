@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html" ; charset="utf-8">
+  <title>JS Site</title>
+  <script type="text/javascript">
+    var isPhoneCorrect = false;
+    var buttons = [];
+
+    function validatePhone() {
+      let reg = /^((\+7)(\s)(\()([0-9]){3}(\))(\s)([0-9]){3}((-([0-9]){2}){2}))$/;
+      let value = document.getElementsByName("phone")[0].value;
+
+      if (reg.test(value)) {
+        isPhoneCorrect = true;
+        document.getElementById("errorPhoneMessage").hidden = true;
+      } else {
+        document.getElementById("errorPhoneMessage").hidden = false;
+      }
+    }
+
+    function doubleButtons(event) {
+      let btn;
+      if (event.target == undefined) {
+        btn = event;
+      } else {
+        btn = event.target;
+      }
+
+      let buttonDiv = document.getElementById("buttonDiv");
+      let index = -1;
+      for (let i = 0; i < buttonDiv.childNodes.length; i++) {
+        if (buttonDiv.childNodes[i] == btn) {
+          index = i;
+        }
+      }
+
+      if (index != -1) {
+        buttonDiv.removeChild(btn);
+      }
+
+      index = buttons.indexOf(btn);
+
+      let newButtonsArray = [];
+
+      for (let i = 0; i < index; i++) {
+        newButtonsArray.push(buttons[i]);
+      }
+
+      for (let j = 0; j < 2; j++) {
+        let newButton = document.createElement("input");
+        newButton.type = "button";
+        newButton.addEventListener("click", function (newButton) {
+          doubleButtons(newButton)
+        });
+        newButtonsArray.push(newButton);
+
+        buttonDiv.appendChild(newButton);
+      }
+
+      for (let i = index + 1; i < buttons.length; i++) {
+        newButtonsArray.push(buttons[i]);
+      }
+    }
+
+
+
+    function addImageButtons() {
+      let newDiv = document.createElement("div");
+
+      let newElement = document.createElement("input");
+      newElement.type = "file";
+      newElement.accept = "image/jpeg,image/gif,image/bmp";
+      newDiv.appendChild(newElement);
+
+      newElement = document.createElement("input");
+      newElement.type = "button";
+      newElement.value = "+";
+      newElement.addEventListener("click", addImageButtons);
+      newDiv.appendChild(newElement);
+
+      newElement = document.createElement("input");
+      newElement.type = "button";
+      newElement.value = "-";
+      newElement.addEventListener("click", function (newElement) {
+        removeImageButtons(newElement)
+      });
+      newDiv.appendChild(newElement);
+
+      document.getElementById("imageButtons").appendChild(newDiv);
+    }
+
+    function removeImageButtons(event) {
+      if (event.target != undefined) {
+        event = event.target;
+      }
+
+      let divImageButtons = document.getElementById("imageButtons");
+      let removableDiv = event.parentNode;
+      divImageButtons.removeChild(removableDiv);
+    }
+
+    function validateForm() {
+      let count = 0;
+      if (!isPhoneCorrect) {
+        document.getElementById("formMessage").hidden = true;
+        return;
+      }
+      let mainDivChildren = document.getElementById("imageButtons").children;
+      for (let i = 0; i < mainDivChildren.length; i++) {
+        for (let j = 0; j < mainDivChildren[i].children.length; j++)
+          if (mainDivChildren[i].children[j].type == "file") {
+            if (mainDivChildren[i].children[j].value != "") {
+              count++;
+            }
+          }
+      }
+
+
+      if (count > 1) {
+        document.getElementById("formMessage").hidden = false;
+      } else {
+        document.getElementById("formMessage").hidden = true;
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <form name="pageForm">
+    <label for="phone">Телефон в формате +7 (123) 123-12-12:</label>
+    <input type="tel" name="phone" onfocusout="validatePhone()">
+    <div id="errorPhoneMessage" hidden="true">Телефон не соответствует формату +7 (123) 123-12-12</div>
+    <br>
+
+    <div id="buttonDiv"><input id="originButton" type="button" onclick="doubleButtons(this)"></div><br>
+
+    <div id="imageButtons">
+      <div>
+        <input type="file" accept="image/jpeg,image/gif,image/bmp">
+        <input type="button" value="+" onclick="addImageButtons()">
+        <input type="button" value="-" onclick="removeImageButtons(this)">
+      </div>
+    </div>
+
+    <input type="button" value="Отправить" onclick="validateForm()">
+    <div id="formMessage" hidden="true">Все заполнено верно.</div>
+
+
+  </form>
+</body>
+
+</html>
