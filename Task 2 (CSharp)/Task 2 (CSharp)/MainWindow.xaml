@@ -1,0 +1,17 @@
+﻿<Window x:Class="Task_2__CSharp_.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task_2__CSharp_"
+        mc:Ignorable="d"
+        Title="Курс Валют" Height="300" Width="300">
+    <Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" Text="Доллар США:" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,31,0,0" Text="Евро:" TextWrapping="Wrap" VerticalAlignment="Top"/>
+
+        <TextBox HorizontalAlignment="Left" Margin="111,8,0,0" Text="{Binding Dollar.RateInRubles}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+        <TextBox HorizontalAlignment="Left" Margin="111,31,0,0" Text="{Binding Euro.RateInRubles}" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" IsEnabled="False"/>
+
+    </Grid>
+</Window>
